@@ -131,7 +131,7 @@ export default function RegisterPage() {
               </div>
               <div className="flex flex-col gap-1.5">
                 <Label className="text-xs text-gray-600">{t.form.gradeLevel} *</Label>
-                <Select required value={form.gradeLevel} onValueChange={(v) => setForm((p) => ({ ...p, gradeLevel: v }))}>
+                <Select required value={form.gradeLevel} onValueChange={(v) => setForm((p) => ({ ...p, gradeLevel: v ?? "" }))}>
                   <SelectTrigger className="h-10 text-sm border-gray-200">
                     <SelectValue placeholder={t.form.gradeLevelPlaceholder} />
                   </SelectTrigger>
@@ -172,7 +172,7 @@ export default function RegisterPage() {
             {/* Department */}
             <div className="flex flex-col gap-1.5">
               <Label className="text-xs text-gray-600">{t.form.department} *</Label>
-              <Select required value={form.department} onValueChange={(v) => setForm((p) => ({ ...p, department: v }))}>
+              <Select required value={form.department} onValueChange={(v) => setForm((p) => ({ ...p, department: v ?? "" }))}>
                 <SelectTrigger className="h-10 text-sm border-gray-200">
                   <SelectValue placeholder={t.form.departmentPlaceholder} />
                 </SelectTrigger>
