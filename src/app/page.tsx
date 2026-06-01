@@ -44,6 +44,7 @@ export default function Home() {
               size="lg"
               variant="outline"
               className="border-white/50 text-white hover:bg-white/10"
+              onClick={() => document.getElementById("features")?.scrollIntoView({ behavior: "smooth" })}
             >
               {t.hero.learnMore}
             </Button>
@@ -52,7 +53,7 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section className="px-4 py-16 max-w-6xl mx-auto w-full">
+      <section id="features" className="px-4 py-16 max-w-6xl mx-auto w-full">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           {t.features.map((feature, i) => (
             <Card key={i} className="border-0 shadow-md hover:shadow-lg transition-shadow">

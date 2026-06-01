@@ -21,8 +21,23 @@ type Visit = {
   contact_email: string;
 };
 
+function formatDate(dateStr: string, lang: string) {
+  try {
+    const date = new Date(dateStr + "T00:00:00");
+    return date.toLocaleDateString(lang === "ar" ? "ar-KW" : "en-GB", {
+      year: "numeric", month: "long", day: "numeric",
+    });
+  } catch { return dateStr; }
+}
+
+function formatTime(timeStr: string) {
+  const parts = timeStr.split(":");
+  if (parts.length >= 2) return `${parts[0]}:${parts[1]}`;
+  return timeStr;
+}
+
 function ConfirmationContent() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const params = useSearchParams();
   const id = params.get("id");
   const [visit, setVisit] = useState<Visit | null>(null);
@@ -54,23 +69,26 @@ function ConfirmationContent() {
   if (notFound || !visit) {
     return (
       <div className="max-w-xl mx-auto px-4 py-16 text-center">
-        <p className="text-gray-500">{t.lang === "ar" ? "لم يُعثر على الطلب." : "Request not found."}</p>
+        <p className="text-gray-500">{lang === "ar" ? "لم يُعثر على الطلب." : "Request not found."}</p>
         <Link href="/register"><Button className="mt-4 bg-[#2b3992] text-white">{t.confirmation.newVisit}</Button></Link>
       </div>
     );
   }
 
+  const gradeLabel = t.form.grades[visit.grade_level as keyof typeof t.form.grades] ?? visit.grade_level;
+  const deptLabel = t.form.departments[visit.department as keyof typeof t.form.departments] ?? visit.department;
+
   const details = [
-    { label: t.form.schoolName, value: visit.school_name },
-    { label: t.form.gradeLevel, value: visit.grade_level },
-    { label: t.form.studentCount, value: String(visit.student_count) },
-    { label: t.form.supervisorCount, value: String(visit.supervisor_count) },
-    { label: t.form.visitDate, value: visit.visit_date },
-    { label: t.form.visitTime, value: visit.visit_time },
-    { label: t.form.department, value: visit.department },
-    { label: t.form.contactName, value: visit.contact_name },
-    { label: t.form.contactPhone, value: visit.contact_phone },
-    { label: t.form.contactEmail, value: visit.contact_email },
+    { label: t.form.schoolName,       value: visit.school_name },
+    { label: t.form.gradeLevel,       value: gradeLabel },
+    { label: t.form.studentCount,     value: String(visit.student_count) },
+    { label: t.form.supervisorCount,  value: String(visit.supervisor_count) },
+    { label: t.form.visitDate,        value: formatDate(visit.visit_date, lang) },
+    { label: t.form.visitTime,        value: formatTime(visit.visit_time) },
+    { label: t.form.department,       value: deptLabel },
+    { label: t.form.contactName,      value: visit.contact_name },
+    { label: t.form.contactPhone,     value: visit.contact_phone },
+    { label: t.form.contactEmail,     value: visit.contact_email },
   ];
 
   return (
@@ -92,9 +110,9 @@ function ConfirmationContent() {
         </CardHeader>
         <CardContent className="flex flex-col gap-3 pt-4">
           {details.map((d, i) => (
-            <div key={i} className="flex justify-between items-center border-b border-gray-50 pb-2 last:border-0">
-              <span className="text-sm text-gray-500">{d.label}</span>
-              <span className="text-sm font-medium text-gray-900">{d.value}</span>
+            <div key={i} className="flex justify-between items-start border-b border-gray-50 pb-2 last:border-0 gap-4">
+              <span className="text-sm text-gray-500 shrink-0">{d.label}</span>
+              <span className="text-sm font-medium text-gray-900 text-end">{d.value}</span>
             </div>
           ))}
         </CardContent>
