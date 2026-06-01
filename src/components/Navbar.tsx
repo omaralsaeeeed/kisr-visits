@@ -17,7 +17,8 @@ export default function Navbar() {
             alt="KISR Logo"
             width={120}
             height={40}
-            className="h-10 w-auto object-contain"
+            style={{ width: "auto", height: "40px" }}
+            className="object-contain"
             priority
           />
         </Link>
