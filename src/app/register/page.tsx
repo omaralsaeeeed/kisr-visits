@@ -58,7 +58,8 @@ export default function RegisterPage() {
         .single();
       if (dbError) throw dbError;
       router.push(`/confirmation?id=${data.id}`);
-    } catch {
+    } catch (err) {
+      console.error("[KISR] Visit submission error:", (err as Error)?.message ?? "unknown");
       setError(t.lang === "ar" ? "حدث خطأ، يرجى المحاولة مجدداً." : "An error occurred, please try again.");
     } finally {
       setLoading(false);
