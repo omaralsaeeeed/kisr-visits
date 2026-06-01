@@ -39,22 +39,25 @@ export default function RegisterPage() {
     setLoading(true);
     setError(null);
     try {
-      const { error: dbError } = await supabase.from("visits").insert({
-        school_name: form.schoolName,
-        grade_level: form.gradeLevel,
-        student_count: parseInt(form.studentCount),
-        supervisor_count: parseInt(form.supervisorCount),
-        visit_date: form.visitDate,
-        visit_time: form.visitTime,
-        department: form.department,
-        purpose: form.purpose,
-        contact_name: form.contactName,
-        contact_phone: form.contactPhone,
-        contact_email: form.contactEmail,
-      });
+      const { data, error: dbError } = await supabase
+        .from("visits")
+        .insert({
+          school_name: form.schoolName,
+          grade_level: form.gradeLevel,
+          student_count: parseInt(form.studentCount),
+          supervisor_count: parseInt(form.supervisorCount),
+          visit_date: form.visitDate,
+          visit_time: form.visitTime,
+          department: form.department,
+          purpose: form.purpose,
+          contact_name: form.contactName,
+          contact_phone: form.contactPhone,
+          contact_email: form.contactEmail,
+        })
+        .select("id")
+        .single();
       if (dbError) throw dbError;
-      const params = new URLSearchParams(form as Record<string, string>);
-      router.push(`/confirmation?${params.toString()}`);
+      router.push(`/confirmation?id=${data.id}`);
     } catch {
       setError(t.lang === "ar" ? "حدث خطأ، يرجى المحاولة مجدداً." : "An error occurred, please try again.");
     } finally {
@@ -123,7 +126,7 @@ export default function RegisterPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
                 <Label className="text-xs text-gray-600">{t.form.schoolName} *</Label>
-                <Input required placeholder={t.form.schoolNamePlaceholder} value={form.schoolName} onChange={set("schoolName")} className="h-10 text-sm border-gray-200 focus-visible:ring-[#52d3aa]" />
+                <Input required maxLength={200} placeholder={t.form.schoolNamePlaceholder} value={form.schoolName} onChange={set("schoolName")} className="h-10 text-sm border-gray-200 focus-visible:ring-[#52d3aa]" />
               </div>
               <div className="flex flex-col gap-1.5">
                 <Label className="text-xs text-gray-600">{t.form.gradeLevel} *</Label>
@@ -145,11 +148,11 @@ export default function RegisterPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
                 <Label className="text-xs text-gray-600">{t.form.studentCount} *</Label>
-                <Input type="number" min="1" required placeholder={t.form.studentCountPlaceholder} value={form.studentCount} onChange={set("studentCount")} className="h-10 text-sm border-gray-200" />
+                <Input type="number" min="1" max="1000" required placeholder={t.form.studentCountPlaceholder} value={form.studentCount} onChange={set("studentCount")} className="h-10 text-sm border-gray-200" />
               </div>
               <div className="flex flex-col gap-1.5">
                 <Label className="text-xs text-gray-600">{t.form.supervisorCount} *</Label>
-                <Input type="number" min="1" required placeholder={t.form.supervisorCountPlaceholder} value={form.supervisorCount} onChange={set("supervisorCount")} className="h-10 text-sm border-gray-200" />
+                <Input type="number" min="1" max="200" required placeholder={t.form.supervisorCountPlaceholder} value={form.supervisorCount} onChange={set("supervisorCount")} className="h-10 text-sm border-gray-200" />
               </div>
             </div>
 
@@ -183,24 +186,24 @@ export default function RegisterPage() {
             {/* Purpose */}
             <div className="flex flex-col gap-1.5">
               <Label className="text-xs text-gray-600">{t.form.purpose} *</Label>
-              <Textarea required rows={2} placeholder={t.form.purposePlaceholder} value={form.purpose} onChange={set("purpose")} className="text-sm border-gray-200 resize-none" />
+              <Textarea required maxLength={1000} rows={2} placeholder={t.form.purposePlaceholder} value={form.purpose} onChange={set("purpose")} className="text-sm border-gray-200 resize-none" />
             </div>
 
             {/* Contact row */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
                 <Label className="text-xs text-gray-600">{t.form.contactName} *</Label>
-                <Input required placeholder={t.form.contactNamePlaceholder} value={form.contactName} onChange={set("contactName")} className="h-10 text-sm border-gray-200" />
+                <Input required maxLength={100} placeholder={t.form.contactNamePlaceholder} value={form.contactName} onChange={set("contactName")} className="h-10 text-sm border-gray-200" />
               </div>
               <div className="flex flex-col gap-1.5">
                 <Label className="text-xs text-gray-600">{t.form.contactPhone} *</Label>
-                <Input type="tel" required placeholder={t.form.contactPhonePlaceholder} value={form.contactPhone} onChange={set("contactPhone")} className="h-10 text-sm border-gray-200" />
+                <Input type="tel" required maxLength={15} pattern="[0-9+\-\s]{8,15}" placeholder={t.form.contactPhonePlaceholder} value={form.contactPhone} onChange={set("contactPhone")} className="h-10 text-sm border-gray-200" />
               </div>
             </div>
 
             <div className="flex flex-col gap-1.5">
               <Label className="text-xs text-gray-600">{t.form.contactEmail} *</Label>
-              <Input type="email" required placeholder={t.form.contactEmailPlaceholder} value={form.contactEmail} onChange={set("contactEmail")} className="h-10 text-sm border-gray-200" />
+              <Input type="email" required maxLength={100} placeholder={t.form.contactEmailPlaceholder} value={form.contactEmail} onChange={set("contactEmail")} className="h-10 text-sm border-gray-200" />
             </div>
 
             <p className="text-xs text-gray-400">{t.form.required}</p>
