@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero */}
-      <section className="relative bg-gradient-to-br from-[#00543D] via-[#006b4f] to-[#004d39] text-white px-4 py-20 sm:py-32 text-center overflow-hidden">
+      <section className="relative bg-gradient-to-br from-[#2b3992] via-[#1a5fa8] to-[#00a0c6] text-white px-4 py-20 sm:py-32 text-center overflow-hidden">
         <div
           className="absolute inset-0 opacity-10"
           style={{
@@ -35,7 +35,7 @@ export default function Home() {
             <Link href="/register" className="w-full sm:w-auto">
               <Button
                 size="lg"
-                className="w-full bg-white text-[#00543D] hover:bg-gray-100 font-semibold shadow-lg"
+                className="w-full bg-[#52d3aa] hover:bg-[#3bbf97] text-white font-semibold shadow-lg border-0"
               >
                 {t.hero.cta}
               </Button>
@@ -57,10 +57,10 @@ export default function Home() {
           {t.features.map((feature, i) => (
             <Card key={i} className="border-0 shadow-md hover:shadow-lg transition-shadow">
               <CardContent className="p-6 flex flex-col gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#00543D]/10 flex items-center justify-center text-[#00543D] font-bold text-lg">
+                <div className="w-10 h-10 rounded-xl bg-[#52d3aa]/15 flex items-center justify-center text-[#2b3992] font-bold text-lg">
                   {i + 1}
                 </div>
-                <h3 className="font-semibold text-gray-900">{feature.title}</h3>
+                <h3 className="font-semibold text-[#2b3992]">{feature.title}</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">{feature.desc}</p>
               </CardContent>
             </Card>
@@ -69,12 +69,12 @@ export default function Home() {
       </section>
 
       {/* CTA Banner */}
-      <section className="bg-[#00543D]/5 border-t border-[#00543D]/10 px-4 py-12 text-center">
+      <section className="bg-[#2b3992]/5 border-t border-[#2b3992]/10 px-4 py-12 text-center">
         <div className="max-w-xl mx-auto flex flex-col gap-4 items-center">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">{t.hero.title}</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-[#2b3992]">{t.hero.title}</h2>
           <p className="text-gray-500 text-sm">{t.hero.subtitle}</p>
           <Link href="/register">
-            <Button className="bg-[#00543D] hover:bg-[#003d2d] text-white px-8">
+            <Button className="bg-[#52d3aa] hover:bg-[#3bbf97] text-white px-8 border-0">
               {t.hero.cta}
             </Button>
           </Link>

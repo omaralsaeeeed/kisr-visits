@@ -45,12 +45,19 @@ export default function RegisterPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-10">
-      <Card className="shadow-lg border-0">
-        <CardHeader className="pb-4">
-          <CardTitle className="text-2xl text-[#00543D]">{t.form.title}</CardTitle>
+      {/* Page header */}
+      <div className="mb-6 flex flex-col gap-1">
+        <div className="h-1 w-12 bg-[#52d3aa] rounded-full mb-2" />
+        <h1 className="text-2xl font-bold text-[#2b3992]">{t.form.title}</h1>
+        <p className="text-gray-500 text-sm">{t.form.subtitle}</p>
+      </div>
+
+      <Card className="shadow-lg border border-gray-100">
+        <CardHeader className="pb-2 border-b border-gray-50">
+          <CardTitle className="text-base text-[#2b3992]">{t.form.title}</CardTitle>
           <CardDescription>{t.form.subtitle}</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
 
             {/* School Info */}
@@ -63,6 +70,7 @@ export default function RegisterPage() {
                   placeholder={t.form.schoolNamePlaceholder}
                   value={form.schoolName}
                   onChange={set("schoolName")}
+                  className="focus-visible:ring-[#52d3aa]"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -72,7 +80,7 @@ export default function RegisterPage() {
                   value={form.gradeLevel}
                   onValueChange={(v) => setForm((p) => ({ ...p, gradeLevel: v }))}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="focus:ring-[#52d3aa]">
                     <SelectValue placeholder={t.form.gradeLevelPlaceholder} />
                   </SelectTrigger>
                   <SelectContent>
@@ -211,7 +219,7 @@ export default function RegisterPage() {
             <Button
               type="submit"
               disabled={loading}
-              className="bg-[#00543D] hover:bg-[#003d2d] text-white w-full py-6 text-base font-semibold"
+              className="bg-[#52d3aa] hover:bg-[#3bbf97] text-white w-full py-6 text-base font-semibold border-0"
             >
               {loading ? t.form.submitting : t.form.submit}
             </Button>
