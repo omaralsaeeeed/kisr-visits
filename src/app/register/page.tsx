@@ -9,11 +9,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useLang } from "@/lib/lang-context";
+import { supabase } from "@/lib/supabase";
 
 export default function RegisterPage() {
   const { t } = useLang();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({
     schoolName: "",
     gradeLevel: "",
@@ -35,9 +37,26 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
     try {
+      const { error: dbError } = await supabase.from("visits").insert({
+        school_name: form.schoolName,
+        grade_level: form.gradeLevel,
+        student_count: parseInt(form.studentCount),
+        supervisor_count: parseInt(form.supervisorCount),
+        visit_date: form.visitDate,
+        visit_time: form.visitTime,
+        department: form.department,
+        purpose: form.purpose,
+        contact_name: form.contactName,
+        contact_phone: form.contactPhone,
+        contact_email: form.contactEmail,
+      });
+      if (dbError) throw dbError;
       const params = new URLSearchParams(form as Record<string, string>);
       router.push(`/confirmation?${params.toString()}`);
+    } catch {
+      setError(t.lang === "ar" ? "حدث خطأ، يرجى المحاولة مجدداً." : "An error occurred, please try again.");
     } finally {
       setLoading(false);
     }
@@ -185,6 +204,12 @@ export default function RegisterPage() {
             </div>
 
             <p className="text-xs text-gray-400">{t.form.required}</p>
+
+            {error && (
+              <p className="text-sm text-red-500 bg-red-50 border border-red-100 rounded-lg px-4 py-2">
+                {error}
+              </p>
+            )}
 
             <Button
               type="submit"
